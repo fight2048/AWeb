@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.fight2048.aweb.databinding.FragmentWebBinding;
 import com.just.agentweb.AgentWeb;
@@ -36,18 +36,6 @@ public class WebFragment extends Fragment {
     private FragmentWebBinding binding;
     protected AgentWeb mAgentWeb;
 
-    public static WebFragment get(Bundle bundle) {
-        WebFragment fragment = new WebFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static WebFragment get(String url) {
-        WebFragment fragment = new WebFragment();
-        fragment.setArguments(bundle(url));
-        return fragment;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,12 +47,11 @@ public class WebFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
-        initView();
+        initWebView();
         initListener();
     }
 
     private void initToolbar() {
-//        initStateBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(v -> handleNavigation());
         binding.toolbar.inflateMenu(R.menu.menu_web);
         binding.toolbar.setOnMenuItemClickListener(item -> {
@@ -90,7 +77,7 @@ public class WebFragment extends Fragment {
         });
     }
 
-    private void initView() {
+    private void initWebView() {
         AgentWeb.PreAgentWeb preAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(binding.getRoot(), -1,
                         new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//传入AgentWeb的父控件。
@@ -140,7 +127,9 @@ public class WebFragment extends Fragment {
         if (webView.canGoBack()) {
             webView.goBack();
         } else {
-            Navigation.findNavController(getView()).popBackStack();
+            // TODO: 2022-08-01 0001 还是得分开，因为别人启动activity的时候，极有可能不是通过navigation启动的，所以会报错
+//            Navigation.findNavController(getView()).popBackStack();
+            ActivityCompat.finishAffinity(getActivity());
         }
     }
 
@@ -189,5 +178,17 @@ public class WebFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(URL, url);
         return bundle;
+    }
+
+    public static WebFragment of(Bundle bundle) {
+        WebFragment fragment = new WebFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static WebFragment of(String url) {
+        WebFragment fragment = new WebFragment();
+        fragment.setArguments(bundle(url));
+        return fragment;
     }
 }

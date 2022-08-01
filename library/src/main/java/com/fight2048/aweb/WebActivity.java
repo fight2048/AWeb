@@ -1,6 +1,6 @@
 package com.fight2048.aweb;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,14 +36,15 @@ public class WebActivity extends AppCompatActivity {
             bundle.putString(WebFragment.URL, uri.toString());
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .add(android.R.id.content, WebFragment.get(bundle))
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, WebFragment.of(bundle))
                 .commit();
     }
 
-    public static void start(Context packageContext, String url) {
-        Intent intent = new Intent(packageContext, WebActivity.class);
+    public static void start(Activity activity, String url) {
+        Intent intent = new Intent(activity, WebActivity.class);
         intent.putExtra(WebFragment.URL, url);
-        ContextCompat.startActivity(packageContext, intent, null);
+        ContextCompat.startActivity(activity, intent, null);
     }
 }
