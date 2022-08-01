@@ -36,7 +36,7 @@ public class MainFragment extends Fragment {
         binding.btFragment.setOnClickListener(v -> {
             String url = binding.et.getText().toString();
             NavHostFragment.findNavController(MainFragment.this)
-                    .navigate(R.id.WebFragment, WebFragment.bundle(TextUtils.isEmpty(url) ? "https://www.baidu.com" : url));
+                    .navigate(R.id.toWebFragment, WebFragment.bundle(TextUtils.isEmpty(url) ? "https://www.baidu.com" : url));
         });
     }
 }

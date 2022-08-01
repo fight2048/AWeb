@@ -13,10 +13,10 @@ import android.widget.LinearLayout;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
-import com.fight2048.aweb.databinding.FragmentWebBinding;
+import com.fight2048.aweb.databinding.LayoutWebBinding;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.DefaultWebClient;
 import com.just.agentweb.WebChromeClient;
@@ -33,13 +33,14 @@ import com.just.agentweb.WebViewClient;
 public class WebFragment extends Fragment {
     private static final String TAG = WebFragment.class.getSimpleName();
     public static final String URL = "url";
-    private FragmentWebBinding binding;
+    private LayoutWebBinding binding;
     protected AgentWeb mAgentWeb;
+    protected OnBackPressedCallback backPressedCallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentWebBinding.inflate(inflater, container, false);
+        binding = LayoutWebBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -52,7 +53,7 @@ public class WebFragment extends Fragment {
     }
 
     private void initToolbar() {
-        binding.toolbar.setNavigationOnClickListener(v -> handleNavigation());
+        binding.toolbar.setNavigationOnClickListener(v -> backPressedCallback.handleOnBackPressed());
         binding.toolbar.inflateMenu(R.menu.menu_web);
         binding.toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.web_share) {
@@ -103,34 +104,30 @@ public class WebFragment extends Fragment {
                 .createAgentWeb();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            String url = bundle.getString("url");
+            String url = bundle.getString(URL);
             Log.d(TAG, "url==>" + url);
             mAgentWeb = preAgentWeb.go(url);
         }
     }
 
     private void initListener() {
-        requireActivity().getOnBackPressedDispatcher()
-                .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-                    @Override
-                    public void handleOnBackPressed() {
-                        handleNavigation();
+        backPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (mAgentWeb == null) {
+                    Navigation.findNavController(getView()).popBackStack();
+                } else {
+                    WebView webView = mAgentWeb.getWebCreator().getWebView();
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    } else {
+                        Navigation.findNavController(getView()).popBackStack();
                     }
-                });
-    }
-
-    private void handleNavigation() {
-        if (mAgentWeb == null) {
-            return;
-        }
-        WebView webView = mAgentWeb.getWebCreator().getWebView();
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            // TODO: 2022-08-01 0001 还是得分开，因为别人启动activity的时候，极有可能不是通过navigation启动的，所以会报错
-//            Navigation.findNavController(getView()).popBackStack();
-            ActivityCompat.finishAffinity(getActivity());
-        }
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher()
+                .addCallback(getViewLifecycleOwner(), backPressedCallback);
     }
 
     @Override
@@ -147,6 +144,12 @@ public class WebFragment extends Fragment {
             mAgentWeb.getWebLifeCycle().onResume();
         }
         super.onResume();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     @Override

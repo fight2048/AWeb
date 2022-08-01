@@ -11,4 +11,12 @@
     <fragment
         android:id="@+id/WebFragment"
         android:name="com.fight2048.aweb.WebFragment" />
+
+    <action
+        android:id="@+id/toWebFragment"
+        app:destination="@id/WebFragment"
+        app:enterAnim="@animator/nav_default_enter_anim"
+        app:exitAnim="@animator/nav_default_exit_anim"
+        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+        app:popExitAnim="@animator/nav_default_pop_exit_anim" />
 </navigation>
