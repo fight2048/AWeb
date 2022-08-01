@@ -1,0 +1,7 @@
+<resources>
+    <string name="web_close">关闭</string>
+    <string name="web_refresh">刷新</string>
+    <string name="web_share">分享</string>
+    <string name="web_open_in_browser">浏览器打开</string>
+    <string name="no_data_try_again">暂无数据～</string>
+</resources>

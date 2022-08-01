@@ -1,0 +1,7 @@
+<resources>
+    <string name="web_close">close</string>
+    <string name="web_refresh">refresh</string>
+    <string name="web_share">share</string>
+    <string name="web_open_in_browser">Open_in_browser</string>
+    <string name="no_data_try_again">No data</string>
+</resources>
