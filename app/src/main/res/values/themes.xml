@@ -25,7 +25,7 @@
 
     <style name="Theme.AWeb" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?android:statusBarColor</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#33000000</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
