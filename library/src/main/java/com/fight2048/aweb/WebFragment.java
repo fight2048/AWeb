@@ -67,7 +67,7 @@ public class WebFragment extends Fragment {
                         && mAgentWeb.getUrlLoader() != null) {
                     mAgentWeb.getUrlLoader().reload();
                 }
-            } else if (item.getItemId() == R.id.web_go2browser) {
+            } else if (item.getItemId() == R.id.web_browser) {
                 if (mAgentWeb != null
                         && mAgentWeb.getWebCreator() != null) {
                     String url = mAgentWeb.getWebCreator().getWebView().getUrl();
