@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.AWeb" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
+        <item name="android:statusBarColor">#33000000</item>
     </style>
 </resources>
