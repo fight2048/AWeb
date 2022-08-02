@@ -22,7 +22,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/web_go2browser"
+        android:id="@+id/web_browser"
         android:title="@string/web_open_in_browser"
         app:showAsAction="never" />
 </menu>
